@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Booking page - Welcome and choose an Event</title>
+</head>
+<body>
+<header>
+    <h1>Welcome to our Event Booking App</h1>
+</header>
+
+<main>
+    <!-- Add Event Button -->
+    <a href="/events/add-form">Add New Event</a> <br/><br/>
+
+    <!-- Search form for filtering events -->
+    <form action="/" method="GET">
+        <h2>Filter events:</h2>
+        <label>
+            <input type="text" name="searchKeyword" placeholder="Enter keyword">
+        </label>
+        <label>
+            <input type="number" name="desiredRating" step="0.1" placeholder="Enter rating">
+        </label>
+        <input type="submit" value="Search">
+    </form>
+
+    <!-- Event List -->
+    <div th:each="event : ${events}">
+        <div>
+            <h3 th:text="${event.getName()}"></h3>
+            <p th:text="${event.getDescription()}"></p>
+            <p><b>Popularity Score:</b> <span th:text="${event.getPopularityScore()}"></span></p>
+            <p><b>Location:</b> <span th:text="${event.location.getName()}"></span></p>
+
+            <!-- Edit Button -->
+            <a th:href="@{'/events/edit-form/' + ${event.getId()}}">Edit</a>
+
+            <!-- Delete Form (POST method for delete operation) -->
+            <form th:action="@{'/events/delete/' + ${event.getId()}}" method="post" style="display:inline;">
+                <input type="submit" value="Delete">
+            </form>
+        </div>
+    </div>
+
+    <!-- Booking Form -->
+    <form action="/eventBooking" method="POST">
+        <h2>Choose an event:</h2>
+        <div th:each="event : ${events}">
+            <label>
+                <input type="radio" name="event" th:value="${event.getId()}">
+                <b>Name:</b> <span th:text="${event.getName()}"></span>
+                <b>Description:</b> <span th:text="${event.getDescription()}"></span>
+                <b>Popularity Score:</b> <span th:text="${event.getPopularityScore()}"></span>
+                <b>Location:</b> <span th:text="${event.getLocation().getName()}"></span>
+            </label>
+            <br/>
+        </div>
+
+        <h2>Choose number of tickets:</h2>
+        <input type="number" name="numTickets" min="1" max="10"><br/><br/>
+
+        <h2>Enter name of the attendee:</h2>
+        <label>
+            Name: <input type="text" name="attendeeName"><br/>
+        </label><br/><br/>
+
+        <input type="submit" value="Submit">
+    </form>
+</main>
+
+</body>
+</html>

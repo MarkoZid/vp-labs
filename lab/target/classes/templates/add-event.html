@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<main>
+    <h1>Add/Edit Event</h1>
+    <form th:action="@{${action}}" method="post">
+        <input type="hidden" name="eventId" th:value="${event?.getId()}">
+
+        <label for="name">Event Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter event name"
+               th:value="${event?.getName()}" required>
+        <br/><br/>
+
+        <label for="description">Event Description:</label>
+        <textarea id="description" name="description" placeholder="Enter event description"
+                  rows="5" th:text="${event?.getDescription()}" required></textarea>
+        <br/><br/>
+
+        <label for="popularityScore">Popularity Score:</label>
+        <input type="number" id="popularityScore" name="popularityScore"
+               min="1" max="10" th:value="${event?.getPopularityScore()}" required>
+        <br/><br/>
+
+        <label for="location">Location:</label>
+        <select id="location" name="locationId" required>
+            <option value="" disabled selected>Select a location</option>
+            <option th:each="location : ${locations}"
+                    th:value="${location.getId()}"
+                    th:selected="${event?.location?.getId() == location.getId()}"
+                    th:text="${location.getName()}">
+            </option>
+        </select>
+        <br/><br/>
+
+        <div class="actions">
+            <input type="submit" value="Save">
+            <a th:href="@{/events}">Cancel</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
